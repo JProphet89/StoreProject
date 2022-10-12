@@ -10,7 +10,7 @@ import Foundation
 
 class ContentViewData: ObservableObject {
     @Published var products: Products = .empty
-    @Published var bagList: [Product]
+    @Published var bagList: [BagItem] = []
     let productService: ProductService
     let bagService: BagService
     private var subscriptions: Set<AnyCancellable> = .init()
@@ -18,12 +18,15 @@ class ContentViewData: ObservableObject {
     init(productService: ProductService, bagService: BagService) {
         self.productService = productService
         self.bagService = bagService
-        bagList = self.bagService.getList()
         fetchProducts()
+        self.bagService.getList()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] items in
+                self?.bagList = items
+            }.store(in: &subscriptions)
     }
-    
-    func addProduct(_ product:Product){
-        bagList.append(product)
+
+    func addProduct(_ product: Product) {
         bagService.add(product: product)
     }
 

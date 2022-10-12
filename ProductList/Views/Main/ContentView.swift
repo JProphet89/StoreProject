@@ -23,18 +23,27 @@ struct ContentView: View {
     @EnvironmentObject var dataController: ContentViewData
 
     var body: some View {
-        if !hasProducts {
-            loadingView
-        } else {
-            ScrollView {
-                Text("\($dataController.bagList.count)")
-                ForEach(dataController.products.products, id: \.id) { product in
-                    ProductListView(product: product)
-                        .environment(\.addProduct, addProduct(product: ))
-                        .padding(.init(top: 5, leading: 10, bottom: 5, trailing: 10))
-                        .fullExpand()
-                        
+        NavigationStack {
+            if !hasProducts {
+                loadingView
+            } else {
+                ScrollView {
+                    ForEach(dataController.products.products, id: \.id) { product in
+                        ProductListView(product: product)
+                            .environment(\.addProduct, addProduct(product:))
+                            .padding(.init(top: 5, leading: 10, bottom: 5, trailing: 10))
+                            .fullExpand()
+                    }
                 }
+                .toolbar(content: {
+                    NavigationLink(destination:
+                        BagView()
+                            .environmentObject(BagViewData(bagService: dataController.bagService))
+                    ) {
+                        Image(systemName: $dataController.bagList.count > 0 ? "cart.fill" : "cart")
+                            .foregroundColor(.black)
+                    }
+                })
             }
         }
     }
@@ -51,8 +60,8 @@ struct ContentView: View {
             Spacer()
         }
     }
-    
-    func addProduct(product:Product){
+
+    func addProduct(product: Product) {
         dataController.addProduct(product)
     }
 }
@@ -61,7 +70,7 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
             .environmentObject(
-                ContentViewData(productService: DefaultProductService(),bagService: DefaultBagService())
+                ContentViewData(productService: DefaultProductService(), bagService: DefaultBagService())
             )
     }
 }

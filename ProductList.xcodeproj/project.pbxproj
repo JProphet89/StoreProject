@@ -13,6 +13,9 @@
 		BE88A3E628F6C439005E79B0 /* ProductListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE88A3E528F6C439005E79B0 /* ProductListView.swift */; };
 		BE88A3EB28F6CBA4005E79B0 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = BE88A3EA28F6CBA4005E79B0 /* Kingfisher */; };
 		BE88A3ED28F6CD4B005E79B0 /* BagService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE88A3EC28F6CD4B005E79B0 /* BagService.swift */; };
+		BE88A3EF28F7008E005E79B0 /* BagItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE88A3EE28F7008E005E79B0 /* BagItem.swift */; };
+		BE88A3F128F7132E005E79B0 /* BagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE88A3F028F7132E005E79B0 /* BagView.swift */; };
+		BE88A3F428F714E0005E79B0 /* BagViewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE88A3F328F714E0005E79B0 /* BagViewData.swift */; };
 		BEED161E28F5C73300A0F468 /* ProductListApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEED161D28F5C73300A0F468 /* ProductListApp.swift */; };
 		BEED162028F5C73300A0F468 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEED161F28F5C73300A0F468 /* ContentView.swift */; };
 		BEED162228F5C73400A0F468 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BEED162128F5C73400A0F468 /* Assets.xcassets */; };
@@ -51,6 +54,9 @@
 		BE88A3DF28F5D3EF005E79B0 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		BE88A3E528F6C439005E79B0 /* ProductListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListView.swift; sourceTree = "<group>"; };
 		BE88A3EC28F6CD4B005E79B0 /* BagService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BagService.swift; sourceTree = "<group>"; };
+		BE88A3EE28F7008E005E79B0 /* BagItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BagItem.swift; sourceTree = "<group>"; };
+		BE88A3F028F7132E005E79B0 /* BagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BagView.swift; sourceTree = "<group>"; };
+		BE88A3F328F714E0005E79B0 /* BagViewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BagViewData.swift; sourceTree = "<group>"; };
 		BEED161A28F5C73300A0F468 /* ProductList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProductList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEED161D28F5C73300A0F468 /* ProductListApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListApp.swift; sourceTree = "<group>"; };
 		BEED161F28F5C73300A0F468 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -121,6 +127,15 @@
 				BE88A3E528F6C439005E79B0 /* ProductListView.swift */,
 			);
 			path = Product;
+			sourceTree = "<group>";
+		};
+		BE88A3F228F714D2005E79B0 /* Bag */ = {
+			isa = PBXGroup;
+			children = (
+				BE88A3F028F7132E005E79B0 /* BagView.swift */,
+				BE88A3F328F714E0005E79B0 /* BagViewData.swift */,
+			);
+			path = Bag;
 			sourceTree = "<group>";
 		};
 		BEED161128F5C73300A0F468 = {
@@ -196,6 +211,7 @@
 		BEED164D28F5C75200A0F468 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				BE88A3F228F714D2005E79B0 /* Bag */,
 				BE88A3E428F6C41D005E79B0 /* Product */,
 				BE88A3E328F6C415005E79B0 /* Main */,
 			);
@@ -207,6 +223,7 @@
 			children = (
 				BEED164F28F5C77100A0F468 /* Product.swift */,
 				BEED165128F5C82800A0F468 /* Products.swift */,
+				BE88A3EE28F7008E005E79B0 /* BagItem.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -368,6 +385,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE88A3E628F6C439005E79B0 /* ProductListView.swift in Sources */,
+				BE88A3F128F7132E005E79B0 /* BagView.swift in Sources */,
+				BE88A3F428F714E0005E79B0 /* BagViewData.swift in Sources */,
 				BEED165A28F5CD0200A0F468 /* ContentViewData.swift in Sources */,
 				BEED162728F5C73400A0F468 /* Persistence.swift in Sources */,
 				BE88A3DD28F5D2EC005E79B0 /* LottieView.swift in Sources */,
@@ -376,6 +395,7 @@
 				BE88A3ED28F6CD4B005E79B0 /* BagService.swift in Sources */,
 				BEED165228F5C82800A0F468 /* Products.swift in Sources */,
 				BEED162028F5C73300A0F468 /* ContentView.swift in Sources */,
+				BE88A3EF28F7008E005E79B0 /* BagItem.swift in Sources */,
 				BEED165828F5C95000A0F468 /* ProductService.swift in Sources */,
 				BEED165D28F5D1C900A0F468 /* View+Extension.swift in Sources */,
 				BEED161E28F5C73300A0F468 /* ProductListApp.swift in Sources */,

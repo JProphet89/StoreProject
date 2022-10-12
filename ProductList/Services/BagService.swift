@@ -6,32 +6,53 @@
 //
 
 import Foundation
+import Combine
 
 protocol BagService {
-    func getList() -> [Product]
+    func getList() -> AnyPublisher<[BagItem],Never>
     func add(product: Product)
     func remove(product: Product)
+    func removeAll()
 }
 
 class DefaultBagService: BagService {
     private let bagKey = "storeBag"
-    private var bagList: [Product] = []
+    @Published private var bagList: [BagItem] = []
 
     init() {
         bagList = getBagInMemory()
     }
 
-    func getList() -> [Product] {
-        return bagList
+    func getList() -> AnyPublisher<[BagItem],Never> {
+        $bagList.eraseToAnyPublisher()
     }
 
     func add(product: Product) {
-        bagList.append(product)
+        if bagList.contains(where: { $0.product.id == product.id }) {
+            bagList = bagList.map({ item in
+                guard
+                    item.product.id == product.id,
+                    item.quantity + 1 < item.product.stock
+                else {
+                    return item
+                }
+                var mutableItem = item
+                mutableItem.quantity += 1
+                return mutableItem
+            })
+        } else {
+            bagList.append(.init(product: product))
+        }
         setBagInMemory()
     }
 
     func remove(product: Product) {
-        bagList.removeAll(where: { $0.id == product.id })
+        bagList.removeAll(where: { $0.product.id == product.id })
+        setBagInMemory()
+    }
+    
+    func removeAll(){
+        bagList = []
         setBagInMemory()
     }
 
@@ -44,12 +65,12 @@ class DefaultBagService: BagService {
         userDefaults.set(listEncoded, forKey: bagKey)
     }
 
-    private func getBagInMemory() -> [Product] {
+    private func getBagInMemory() -> [BagItem] {
         let userDefaults = UserDefaults.standard
         let decoder = JSONDecoder()
         guard
             let savedBagList = userDefaults.object(forKey: bagKey) as? Data,
-            let listDecoded = try? decoder.decode([Product].self, from: savedBagList)
+            let listDecoded = try? decoder.decode([BagItem].self, from: savedBagList)
         else {
             return []
         }
