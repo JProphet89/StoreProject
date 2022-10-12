@@ -14,7 +14,12 @@ struct ProductListApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environmentObject(
+                    ContentViewData(
+                        productService: DefaultProductService(),
+                        bagService: DefaultBagService()
+                    )
+                )
         }
     }
 }
