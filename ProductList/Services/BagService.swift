@@ -5,12 +5,13 @@
 //  Created by João Fonseca on 12/10/2022.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 protocol BagService {
-    func getList() -> AnyPublisher<[BagItem],Never>
+    func getList() -> AnyPublisher<[BagItem], Never>
     func add(product: Product)
+    func reduce(product: Product)
     func remove(product: Product)
     func removeAll()
 }
@@ -23,7 +24,7 @@ class DefaultBagService: BagService {
         bagList = getBagInMemory()
     }
 
-    func getList() -> AnyPublisher<[BagItem],Never> {
+    func getList() -> AnyPublisher<[BagItem], Never> {
         $bagList.eraseToAnyPublisher()
     }
 
@@ -46,12 +47,31 @@ class DefaultBagService: BagService {
         setBagInMemory()
     }
 
+    func reduce(product: Product) {
+        if bagList.contains(where: { $0.product.id == product.id }) {
+            bagList = bagList.compactMap({ item in
+                guard item.product.id == product.id else {
+                    return item
+                }
+
+                if item.quantity - 1 > 0 {
+                    var mutableItem = item
+                    mutableItem.quantity -= 1
+                    return mutableItem
+                } else {
+                    return nil
+                }
+            })
+        }
+        setBagInMemory()
+    }
+
     func remove(product: Product) {
         bagList.removeAll(where: { $0.product.id == product.id })
         setBagInMemory()
     }
-    
-    func removeAll(){
+
+    func removeAll() {
         bagList = []
         setBagInMemory()
     }

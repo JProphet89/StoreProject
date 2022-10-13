@@ -21,6 +21,7 @@ extension EnvironmentValues {
 
 struct ContentView: View {
     @EnvironmentObject var dataController: ContentViewData
+    @State private var toast: Toast? = nil
 
     var body: some View {
         NavigationStack {
@@ -42,8 +43,10 @@ struct ContentView: View {
                     ) {
                         Image(systemName: $dataController.bagList.count > 0 ? "cart.fill" : "cart")
                             .foregroundColor(.black)
-                    }
+                    }.accessibilityLabel("accessibilityBagIcon")
                 })
+                .accessibilityLabel("accessibilityProductList")
+                .toastView(toast: $toast)
             }
         }
     }
@@ -52,6 +55,8 @@ struct ContentView: View {
         !dataController.products.products.isEmpty
     }
 
+    //MARK: - subviews extracted
+    
     private var loadingView: some View {
         VStack(alignment: .center) {
             Spacer()
@@ -61,8 +66,11 @@ struct ContentView: View {
         }
     }
 
-    func addProduct(product: Product) {
+    //MARK: - functions
+    
+    private func addProduct(product: Product) {
         dataController.addProduct(product)
+        toast = .init(title: "Bag updated", message: "\(product.title) was added. You have \(dataController.bagList.filter({$0.product.id == product.id}).first?.quantity ?? 1) in the bag")
     }
 }
 

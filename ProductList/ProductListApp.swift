@@ -9,14 +9,18 @@ import SwiftUI
 
 @main
 struct ProductListApp: App {
-    let persistenceController = PersistenceController.shared
+#if DEBUG
+    let productService: ProductService = ProcessInfo.processInfo.arguments.contains("UITest") ? MockProductService() : DefaultProductService()
+#else
+    let productService = DefaultProductService()
+#endif
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(
                     ContentViewData(
-                        productService: DefaultProductService(),
+                        productService: productService,
                         bagService: DefaultBagService()
                     )
                 )

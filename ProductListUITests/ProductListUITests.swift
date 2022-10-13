@@ -8,34 +8,42 @@
 import XCTest
 
 final class ProductListUITests: XCTestCase {
+    var app: XCUIApplication!
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
+        app = XCUIApplication()
+        app.launchArguments = ["UITest"]
+        app.launch()
         continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        app.terminate()
     }
 
-    func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
-        app.launch()
-
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testLaunchPerformance() throws {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
-            // This measures how long it takes to launch your application.
-            measure(metrics: [XCTApplicationLaunchMetric()]) {
-                XCUIApplication().launch()
-            }
-        }
+    func testAddAndRemoveProductFromBagList() throws {
+        // Wait for the list
+        let productList = app.scrollViews["accessibilityProductList"]
+        XCTAssertTrue(productList.waitForExistence(timeout: 3))
+        // Add product to the list
+        let productAddBagIcon = app.buttons["accessibilityProductAddButton"].firstMatch
+        XCTAssertTrue(productAddBagIcon.waitForExistence(timeout: 3))
+        XCTAssertTrue(productAddBagIcon.isHittable)
+        productAddBagIcon.tap()
+        // Go to bag
+        let bagIcon = app.buttons["accessibilityBagIcon"]
+        XCTAssertTrue(bagIcon.isHittable)
+        bagIcon.tap()
+        // Wait for the bag list
+        let bagList = app.scrollViews["accessibilityBagList"]
+        XCTAssertTrue(bagList.waitForExistence(timeout: 3))
+        // Get First item on list
+        let bagListItem = app.scrollViews["accessibilityBagListItem"].firstMatch
+        XCTAssertTrue(bagListItem.waitForExistence(timeout: 3))
+        // Get First item on list
+        let removeButton = bagList.otherElements.buttons["accessibilityBagListItem"].firstMatch
+        XCTAssertTrue(removeButton.waitForExistence(timeout: 3))
+        XCTAssertTrue(removeButton.isHittable)
+        removeButton.tap()
     }
 }
