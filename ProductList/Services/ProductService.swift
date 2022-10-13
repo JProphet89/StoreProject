@@ -15,14 +15,41 @@ protocol ProductService {
 class DefaultProductService: ProductService {
     func getProducts() -> AnyPublisher<Products, Never> {
         guard let url = URL(string: .productURL) else {
-            return Just(.empty).eraseToAnyPublisher()
+            return Just(getProducts()).eraseToAnyPublisher()
         }
 
         return URLSession.shared.dataTaskPublisher(for: url)
             .map { $0.data }
             .decode(type: Products.self, decoder: JSONDecoder())
-            .replaceError(with: .empty)
+            .map({ [weak self] products in
+                self?.saveProducts(products: products)
+                return products
+            })
+            .replaceError(with: getProducts())
             .eraseToAnyPublisher()
+    }
+
+    //MARK: - Save products to disk to work offline
+    private let productsKey = "productsList"
+    private func saveProducts(products: Products) {
+        let userDefaults = UserDefaults.standard
+        let encoder = JSONEncoder()
+        guard let listEncoded = try? encoder.encode(products) else {
+            return
+        }
+        userDefaults.set(listEncoded, forKey: productsKey)
+    }
+
+    private func getProducts() -> Products {
+        let userDefaults = UserDefaults.standard
+        let decoder = JSONDecoder()
+        guard
+            let savedProductList = userDefaults.object(forKey: productsKey) as? Data,
+            let listDecoded = try? decoder.decode(Products.self, from: savedProductList)
+        else {
+            return .empty
+        }
+        return listDecoded
     }
 }
 
